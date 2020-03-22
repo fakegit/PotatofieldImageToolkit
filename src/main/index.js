@@ -3,6 +3,7 @@ import { autoUpdater } from 'electron-updater'
 import '../renderer/store'
 
 const path = require('path')
+const vueDevtools = require('vue-devtools')
 
 /**
  * Set `__static` path to static files in production
@@ -39,7 +40,7 @@ function createWindow(args) {
     title: args.title,
     frame: false,
     fullscreenable: false,
-    resizable: false,
+    resizable: true,
     closable: false,
     show: false,
     parent: args.modal ? args.parent : null,
@@ -125,6 +126,9 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 app.on('ready', () => {
+  if (process.env.NODE_ENV !== 'production') {
+    vueDevtools.install()
+  }
   zoomFactor = screen.getPrimaryDisplay().workAreaSize.height / devWindowHeight * scale
   mainWindow = createWindow({
     title: '洋芋田图像工具箱',
